@@ -402,11 +402,13 @@ define("Boilerplate/Classes/Images", ["require", "exports"], function (require, 
         }
         Images.prototype.getImage = function (path) {
             if (this.images[path] == undefined) {
+                console.log('loading image');
                 var image = new Image();
                 image.src = "images/" + path + ".png";
                 this.imageContainerElement.append(image);
                 this.images[path] = image;
             }
+            console.log(this.images[path]);
             return this.images[path];
         };
         return Images;
@@ -489,7 +491,9 @@ define("Game/Classes/Game", ["require", "exports", "Game/Classes/Camera", "Boile
         Game.prototype.update = function () {
         };
         Game.prototype.draw = function () {
+            console.log('in here');
             this.context.drawImage(this.images.getImage(ImagePaths_1.ImagePaths.Test), 200, 100);
+            debugger;
         };
         return Game;
     }(GameBase_1.GameBase));

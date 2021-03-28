@@ -16,6 +16,9 @@ export class Game extends GameBase {
     }
 
     draw() {
+        console.log('in here');
         this.context.drawImage(this.images.getImage(ImagePaths.Test), 200, 100);
+
+        debugger;
     }
 }

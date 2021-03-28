@@ -20,7 +20,7 @@ export class Input {
         this.currentMouseState = new MouseState(0, 0, false, false, Scroll.None);
         this.runningMouseState = new MouseState(0, 0, false, false, Scroll.None);
 
-        canvas.addEventListener('mousedown', (event) => {
+        canvas.addEventListener("mousedown", (event) => {
             if (event.button === MouseButton.Left) {
                 this.runningMouseState.left = true;
                 this.leftDownPosition.x = this.runningMouseState.x;
@@ -33,7 +33,7 @@ export class Input {
             }
         });
 
-        canvas.addEventListener('mouseup', (event) => {
+        canvas.addEventListener("mouseup", (event) => {
             if (event.button === MouseButton.Left) {
                 this.runningMouseState.left = false;
                 this.leftUsed = false;
@@ -44,16 +44,16 @@ export class Input {
             }
         });
 
-        canvas.addEventListener('mousemove', (event) => {
+        canvas.addEventListener("mousemove", (event) => {
             const target = event.currentTarget as Element;
             const rect = target.getBoundingClientRect();
             this.runningMouseState.x = event.clientX - rect.left;
             this.runningMouseState.y = event.clientY - rect.top;
         });
 
-        canvas.addEventListener('contextmenu', (event) => event.preventDefault());
+        canvas.addEventListener("contextmenu", (event) => event.preventDefault());
 
-        canvas.addEventListener('wheel', (event) => {
+        canvas.addEventListener("wheel", (event) => {
             if (event.deltaY < 0)
                 this.runningMouseState.scroll = Scroll.Up;
             else if (event.deltaY > 0)

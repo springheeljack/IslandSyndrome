@@ -1,18 +1,19 @@
-//Copied from old project, sort out if it is needed in the future
+export class Images {
+    private imageContainerElement: HTMLElement;
+    private images = {};
 
-enum ImageNames {
-    Test = 'test',
-}
+    constructor(imageContainerElementId: string) {
+        this.imageContainerElement = document.getElementById(imageContainerElementId);
+    }
 
-function setupImages() {
-    const imageDiv = document.getElementById('images');
+    getImage(path: string) {
+        if (this.images[path] == undefined) {
+            const image = new Image();
+            image.src = "images/" + path + ".png";
+            this.imageContainerElement.append(image);
+            this.images[path] = image;
+        }
 
-    for (let imageName in ImageNames) {
-        const image = new Image();
-        image.src = 'images/' + ImageNames[imageName] + '.png';
-        imageDiv.append(image);
-        images[ImageNames[imageName]] = image;
+        return this.images[path];
     }
 }
-
-let images = {} as Record<ImageNames, HTMLImageElement>;

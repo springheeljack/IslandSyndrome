@@ -86,7 +86,7 @@ define("Boilerplate/Classes/Context2D", ["require", "exports", "Boilerplate/Enum
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     HTMLCanvasElement.prototype.getContext2D = function () {
-        return this.getContext('2d');
+        return this.getContext("2d");
     };
     CanvasRenderingContext2D.prototype.drawString = function (text, x, y, size, font, colour, align) {
         this.fillStyle = colour.getHexString();
@@ -206,7 +206,7 @@ define("Boilerplate/Classes/Input", ["require", "exports", "Boilerplate/Classes/
             this.previousMouseState = new MouseState_1.MouseState(0, 0, false, false, Scroll_1.Scroll.None);
             this.currentMouseState = new MouseState_1.MouseState(0, 0, false, false, Scroll_1.Scroll.None);
             this.runningMouseState = new MouseState_1.MouseState(0, 0, false, false, Scroll_1.Scroll.None);
-            canvas.addEventListener('mousedown', function (event) {
+            canvas.addEventListener("mousedown", function (event) {
                 if (event.button === MouseButton_1.MouseButton.Left) {
                     _this.runningMouseState.left = true;
                     _this.leftDownPosition.x = _this.runningMouseState.x;
@@ -218,7 +218,7 @@ define("Boilerplate/Classes/Input", ["require", "exports", "Boilerplate/Classes/
                     _this.rightDownPosition.y = _this.runningMouseState.y;
                 }
             });
-            canvas.addEventListener('mouseup', function (event) {
+            canvas.addEventListener("mouseup", function (event) {
                 if (event.button === MouseButton_1.MouseButton.Left) {
                     _this.runningMouseState.left = false;
                     _this.leftUsed = false;
@@ -228,14 +228,14 @@ define("Boilerplate/Classes/Input", ["require", "exports", "Boilerplate/Classes/
                     _this.rightUsed = false;
                 }
             });
-            canvas.addEventListener('mousemove', function (event) {
+            canvas.addEventListener("mousemove", function (event) {
                 var target = event.currentTarget;
                 var rect = target.getBoundingClientRect();
                 _this.runningMouseState.x = event.clientX - rect.left;
                 _this.runningMouseState.y = event.clientY - rect.top;
             });
-            canvas.addEventListener('contextmenu', function (event) { return event.preventDefault(); });
-            canvas.addEventListener('wheel', function (event) {
+            canvas.addEventListener("contextmenu", function (event) { return event.preventDefault(); });
+            canvas.addEventListener("wheel", function (event) {
                 if (event.deltaY < 0)
                     _this.runningMouseState.scroll = Scroll_1.Scroll.Up;
                 else if (event.deltaY > 0)
@@ -391,18 +391,41 @@ define("Game/Classes/Camera", ["require", "exports", "Boilerplate/Classes/Vector
     }());
     exports.Camera = Camera;
 });
-define("Boilerplate/Classes/GameBase", ["require", "exports", "Boilerplate/Classes/Input"], function (require, exports, Input_1) {
+define("Boilerplate/Classes/Images", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Images = void 0;
+    var Images = /** @class */ (function () {
+        function Images(imageContainerElementId) {
+            this.images = {};
+            this.imageContainerElement = document.getElementById(imageContainerElementId);
+        }
+        Images.prototype.getImage = function (path) {
+            if (this.images[path] == undefined) {
+                var image = new Image();
+                image.src = "images/" + path + ".png";
+                this.imageContainerElement.append(image);
+                this.images[path] = image;
+            }
+            return this.images[path];
+        };
+        return Images;
+    }());
+    exports.Images = Images;
+});
+define("Boilerplate/Classes/GameBase", ["require", "exports", "Boilerplate/Classes/Images", "Boilerplate/Classes/Input"], function (require, exports, Images_1, Input_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.GameBase = void 0;
     var GameBase = /** @class */ (function () {
         function GameBase() {
             var _this = this;
-            this.canvas = document.getElementById('gameCanvas');
+            this.canvas = document.getElementById("gameCanvas");
             this.context = this.canvas.getContext2D();
             this.input = new Input_1.Input(this.canvas);
+            this.images = new Images_1.Images("images");
             this.updateWindowSize();
-            window.addEventListener('resize', function () { return _this.updateWindowSize(); });
+            window.addEventListener("resize", function () { return _this.updateWindowSize(); });
         }
         GameBase.prototype.run = function () {
             this.initialize();
@@ -441,6 +464,15 @@ define("Boilerplate/Classes/GameBase", ["require", "exports", "Boilerplate/Class
     }());
     exports.GameBase = GameBase;
 });
+define("Game/Enums/ImagePaths", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ImagePaths = void 0;
+    var ImagePaths;
+    (function (ImagePaths) {
+        ImagePaths["Test"] = "test";
+    })(ImagePaths = exports.ImagePaths || (exports.ImagePaths = {}));
+});
 define("Game/Classes/Game", ["require", "exports", "Game/Classes/Camera", "Boilerplate/Classes/GameBase"], function (require, exports, Camera_1, GameBase_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -451,6 +483,7 @@ define("Game/Classes/Game", ["require", "exports", "Game/Classes/Camera", "Boile
             return _super !== null && _super.apply(this, arguments) || this;
         }
         Game.prototype.initialize = function () {
+            this.context.imageSmoothingEnabled = false;
             this.camera = new Camera_1.Camera();
         };
         Game.prototype.update = function () {
@@ -497,21 +530,6 @@ define("Boilerplate/Functions", ["require", "exports"], function (require, expor
     }
     exports.randomInt = randomInt;
 });
-//Copied from old project, sort out if it is needed in the future
-var ImageNames;
-(function (ImageNames) {
-    ImageNames["Test"] = "test";
-})(ImageNames || (ImageNames = {}));
-function setupImages() {
-    var imageDiv = document.getElementById('images');
-    for (var imageName in ImageNames) {
-        var image = new Image();
-        image.src = 'images/' + ImageNames[imageName] + '.png';
-        imageDiv.append(image);
-        images[ImageNames[imageName]] = image;
-    }
-}
-var images = {};
 define("Game/Classes/Colours", ["require", "exports", "Boilerplate/Classes/Colour"], function (require, exports, Colour_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

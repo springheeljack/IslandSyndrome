@@ -1,4 +1,5 @@
 import { Context2D } from "./Context2D";
+import { Images } from "./Images";
 import { Input } from "./Input";
 
 export abstract class GameBase {
@@ -13,19 +14,21 @@ export abstract class GameBase {
     context: Context2D;
 
     input: Input;
+    images: Images;
 
     windowWidth: number;
     windowHeight: number;
 
     constructor() {
-        this.canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
+        this.canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
 
         this.context = this.canvas.getContext2D();
 
         this.input = new Input(this.canvas);
+        this.images = new Images("images");
 
         this.updateWindowSize();
-        window.addEventListener('resize', () => this.updateWindowSize());
+        window.addEventListener("resize", () => this.updateWindowSize());
     }
 
     run() {
@@ -34,11 +37,11 @@ export abstract class GameBase {
         this.startDrawing();
     }
 
-    abstract initialize();
+    abstract initialize(): void;
 
-    abstract update();
+    abstract update(): void;
 
-    abstract draw();
+    abstract draw(): void;
 
     private baseUpdate() {
         this.input.update();

@@ -21,7 +21,7 @@ declare global {
 }
 
 HTMLCanvasElement.prototype.getContext2D = function () {
-    return this.getContext('2d') as Context2D;
+    return this.getContext("2d") as Context2D;
 }
 
 CanvasRenderingContext2D.prototype.drawString = function (text: string, x: number, y: number, size: number, font: Fonts, colour: Colour, align: Align) {

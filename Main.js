@@ -473,7 +473,7 @@ define("Game/Enums/ImagePaths", ["require", "exports"], function (require, expor
         ImagePaths["Test"] = "test";
     })(ImagePaths = exports.ImagePaths || (exports.ImagePaths = {}));
 });
-define("Game/Classes/Game", ["require", "exports", "Game/Classes/Camera", "Boilerplate/Classes/GameBase"], function (require, exports, Camera_1, GameBase_1) {
+define("Game/Classes/Game", ["require", "exports", "Game/Classes/Camera", "Boilerplate/Classes/GameBase", "Game/Enums/ImagePaths"], function (require, exports, Camera_1, GameBase_1, ImagePaths_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Game = void 0;
@@ -489,6 +489,7 @@ define("Game/Classes/Game", ["require", "exports", "Game/Classes/Camera", "Boile
         Game.prototype.update = function () {
         };
         Game.prototype.draw = function () {
+            this.context.drawImage(this.images.getImage(ImagePaths_1.ImagePaths.Test), 200, 100);
         };
         return Game;
     }(GameBase_1.GameBase));
